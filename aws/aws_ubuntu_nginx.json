@@ -1,0 +1,32 @@
+{
+,
+    "variables": {
+      "name": "ubuntu_nginx",
+      "source_ami": "ami-08182c55a1c188dee",
+      "access_key":"",
+      "secret_key":"",
+      "region":"eu-west-3"
+    },
+    "builders": [{
+      "type": "amazon-ebs",
+      "access_key": "{{user `access_key`}}",
+      "secret_key":"{{user `secret_key`}}",
+      "ami_name": "{{user `name`}}",
+      "region": "{{user `region`}}",
+      "source_ami": "{{user `source_ami`}}",
+      "instance_type": "t2.micro",
+      "communicator": "ssh",
+      "ssh_username": "ubuntu",
+      "run_tags":{"Name":"packer-image-tibo"}
+    }],
+    "provisioners": [
+        {
+            "type": "shell",
+            "inline": "sudo apt update"
+        },
+        {
+            "type": "shell",
+            "inline": ["sudo apt install nginx -y","sudo systemctl enable nginx", "sudo systemctl start nginx"]
+        }
+      ]
+  }
